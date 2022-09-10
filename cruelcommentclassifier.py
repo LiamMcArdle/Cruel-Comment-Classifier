@@ -66,7 +66,7 @@ model = Model(inputs=inpt, outputs=X)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 batch_size = 32
-epochs = 3
+epochs = 10
 predictions = model.fit(X_train, Y, batch_size=batch_size, epochs=epochs, validation_split=0.1)
 
 model.save("cruelcommentclassifier_model.h5")
