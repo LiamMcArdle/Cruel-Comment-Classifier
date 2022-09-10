@@ -14,7 +14,7 @@
 ##### An accuracy of 99.4% is high, and thus the model is quite accurate at a glance. TODO - Get confusion matrix to verify
 
 ##### Below is the loss vs. the number of epochs for both the test and train data: 
-![train loss and accuracy](Training Loss and Accuracy.jpeg)
+![train loss and accuracy](Training_Loss_and_Accuracy.jpg)
 
 ### **Future plans:** implement the model into some other program that can detect toxic sentences and do something with it.
 
