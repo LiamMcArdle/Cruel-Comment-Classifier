@@ -11,6 +11,9 @@ from keras.layers import Bidirectional, GlobalMaxPool1D
 from keras.models import Model
 from keras import initializers, regularizers, constraints, optimizers, layers
 
+batch_size = 64
+epochs = 10
+
 train = pd.read_csv('train/train.csv', encoding = 'ascii', encoding_errors='backslashreplace')
 test = pd.read_csv('test/test.csv', encoding = 'ascii', encoding_errors='backslashreplace')
 
@@ -38,14 +41,14 @@ X_train = pad_sequences(tokenized_train, maxlen=max_length)
 X_test = pad_sequences(tokenized_test, maxlen=max_length)
 
 #Input layer
-inpt = Input(shape = (max_length,   ))
+inpt = Input(shape = (max_length, ))
 
 #Embedding layer - list of coordinates to words in vector space
 embed_size = 200
 X = Embedding(max_length, embed_size)(inpt)
 
 #LSTM layer 
-X = LSTM(80, return_sequences=True, name='LSTM_layer')(X) 
+X = LSTM(batch_size, return_sequences=True, name='LSTM_Layer')(X) 
 
 #Pooling to reshape 3D tensor to 2D
 X = GlobalMaxPool1D()(X)
@@ -53,20 +56,21 @@ X = GlobalMaxPool1D()(X)
 #Dropout layer
 X = Dropout(0.1)(X)
 
-X = Dense(50, activation="relu")(X)
+X = Dense(50)(X)
+X = Activation('relu')(X)
 
 #Dropout again
 X = Dropout(0.1)(X)
 
 #Sigmoid layer - for binary classification
-X = Dense(6, activation="sigmoid")(X)
+X = Dense(6)(X)
+X = Activation('sigmoid')(X)
 
 #Define inputs, outputs and configure learning process
 model = Model(inputs=inpt, outputs=X)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.summary()
 
-batch_size = 32
-epochs = 10
 predictions = model.fit(X_train, Y, batch_size=batch_size, epochs=epochs, validation_split=0.1)
 
 model.save("cruelcommentclassifier_model.h5")
